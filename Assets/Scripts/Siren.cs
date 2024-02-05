@@ -5,8 +5,10 @@ public class Siren : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private float _rate;
+    [SerializeField] private float _volumeMin;
+    [SerializeField] private float _volumeMax;
 
-    private bool _isActive;
+    public bool IsActive { get; private set; }
 
     private void Start()
     {
@@ -15,13 +17,13 @@ public class Siren : MonoBehaviour
 
     private void Update()
     {
-        if (_isActive)
+        if (IsActive)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, 1, _rate * Time.deltaTime);
+            ChangeVolumeToTarget(_volumeMax);
         }
         else if (_audioSource.volume != 0)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, 0, _rate * Time.deltaTime);
+            ChangeVolumeToTarget(_volumeMin);
         }
         else if (_audioSource.volume == 0)
         { 
@@ -29,21 +31,19 @@ public class Siren : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Activate()
     {
-        if (other.GetComponent<Player>() && _isActive == false)
-        {
-            _isActive = true;
-            
-            _audioSource.Play();
-        }
+        IsActive = true;
+        _audioSource.Play();
     }
-    
-    private void OnTriggerExit(Collider other)
+
+    public void Deactivate()
     {
-        if (other.GetComponent<Player>())
-        {
-            _isActive = false;
-        }
+        IsActive = false;
+    }
+
+    private void ChangeVolumeToTarget(float target)
+    {
+        _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _rate * Time.deltaTime);
     }
 }
