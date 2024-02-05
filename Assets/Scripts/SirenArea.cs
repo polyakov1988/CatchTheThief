@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Siren))]
 public class SirenArea : MonoBehaviour
 {
     [SerializeField] private Siren _siren;
