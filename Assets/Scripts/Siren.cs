@@ -37,7 +37,6 @@ public class Siren : MonoBehaviour
             
             _audioSource.Play();
         }
-            
     }
     
     private void OnTriggerExit(Collider other)
